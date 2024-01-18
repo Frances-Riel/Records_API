@@ -1,6 +1,7 @@
 <?php
 
 namespace Database\Factories;
+
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -16,10 +17,10 @@ class RecordFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->name(),
-            'age' => fake()->numberBetween(18, 80),
-            'address' => fake()->address(),
-            'gender' => fake()->randomElement(['male', 'female']),
+           'name'=>fake()->name(),
+           'age' => $this->faker->numberBetween(18, 60),
+           'address' => $this->faker->address,
+            'gender' => $this->faker->randomElement(['male', 'female']),
         ];
     }
 }

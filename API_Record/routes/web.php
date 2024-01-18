@@ -1,7 +1,5 @@
 <?php
 
-use App\Http\Controllers\RecordController;
-use App\Http\Controllers\LoginController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,14 +13,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/', function () {
+    return view('index');
+})->name('index');
 
-Route::get('/', [LoginController::class, 'See'])->name('login');
-//Route::post('loginApi', [LoginController::class, 'WEBlogin'])->name('loginApi');
-
-Route::middleware('auth:sanctum')->group(function () {
-    Route::get('record', [RecordController::class, 'index'])->name('record');
-
-});
-//Route::get('view/detail/users', [HomeController::class, 'index'])->name('view/datail/users');
-
-//Route::get('login', [LoginController::class, 'WEBlogin'])->name('login');
+Route::get('/record', function () {
+    return view('record');
+})->name('record');
