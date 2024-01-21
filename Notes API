@@ -1,0 +1,105 @@
+composer create-project laravel/laravel NAME
+
+uncomment the seeder (user)
+
+php artisan make:controller LoginController
+
+<?php
+namespace App\Http\Controllers;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
+
+class LoginController extends Controller
+{
+    public function index(Request $request)
+    {
+        $credentials = $request->only('email','password');
+        if(Auth::attempt($credentials)){
+            return response([
+                'message'=>'Authentication Success',
+                'token'=>Auth::user()->createToken('email')->plainTextToken
+            ]);
+        }else{
+            return response([
+                'message'=>'Authentication Failed'
+            ],401);
+        }
+    }
+}
+
+Routes> api.php>
+use App\Http\Controllers\AuthController;
+Route::post('/login',[LoginController::class, 'index']);
+
+
+--------------------------
+
+php artisan make:model NAME -m
+
+protected $fillable = [
+        'name',
+        'age',
+        'address',
+        'gender',
+    ];
+    public function recordedData(Request $request){
+        auth($request)->records;
+    }
+-------------------------
+>migration
+public function up(): void
+    {
+        Schema::create('records', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->integer('age');
+            $table->string('address');
+            $tabl/e->string('gender');
+            $table->timestamps();
+        });
+    }
+
+php artisan migrate
+-------------------------
+php artisan make:controller NAME 
+
+use App\Models\Record;
+
+public function index(){
+        return response()->json(Record::all());
+    }
+-------------------------
+php artisan make:factory NAME
+
+Factory>
+public function definition(): array
+    {
+        return [
+           'name'=>fake()->name(),
+           'age' => $this->faker->numberBetween(18, 60),
+           'address' => $this->faker->address,
+           'gender' => $this->faker->randomElement(['male', 'female']),
+        ];
+    }
+-------------------------
+public function run(): void
+    {
+        // \App\Models\User::factory(10)->create();
+
+        \App\Models\User::factory()->create([
+            'name' => 'Test User',
+            'email' => 'test@example.com',
+        ]);
+
+        \App\Models\Record::factory(10)->create();
+    }
+
+php artisan migrate:fresh --seed
+-------------------------
+
+routes>api.php
+
+Route::middleware('auth:sanctum')->group(function(){
+    Route::get('/records',[RecordController::class,'index']);
+});
+
